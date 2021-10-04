@@ -1,3 +1,5 @@
+'use strict';
+
 let title = 'jsLesson';
 const screens = 'Простые, Сложные, Интерактивные';
 let screenPrice = 560;
