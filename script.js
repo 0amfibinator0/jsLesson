@@ -38,7 +38,7 @@ function getFullPrice () {
 }
 
 function getTitle () {
-    return title[0].toUpperCase() + title.substr(1).toLowerCase();
+    return title.trim()[0].toUpperCase() + title.trim().substr(1).toLowerCase();
 }
 
 function getServicePercentPrices () {
