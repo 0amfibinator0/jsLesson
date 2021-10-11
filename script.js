@@ -5,7 +5,7 @@ const appData = {
     screens: '',
     screenPrice: 0,
     adaptive: true,
-    rollback: 50,
+    rollback: 10,
     allServicePrices: 0,
     fullPrice: 0,
     servicePercentPrice: 0,
@@ -17,15 +17,12 @@ const appData = {
         appData.adaptive = confirm('Нужен ли адаптив на сайте?');
         do {
             appData.screenPrice = prompt('Сколько будет стоить данная работа?');
-        } while (!obj.isNumber(appData.screenPrice));
+        } while (!appData.isNumber(appData.screenPrice));
     },
-};
-
-const obj = {
     isNumber: function (num) {
         return !isNaN(parseFloat(num)) && isFinite(num);
     },
-
+    
     getAllServicePrices: function allServicePrices () {
         let sum = 0;
         let price = 0;
@@ -39,7 +36,7 @@ const obj = {
             }
             do {
                 price = prompt('Сколько это будет стоить?');
-            } while (!obj.isNumber(price));
+            } while (!appData.isNumber(price));
             sum += +price;
         } while (i < 2);
         return sum;
@@ -69,18 +66,18 @@ const obj = {
         }
     },
     logger: function () {
-        console.log(obj.getAllServicePrices());
-        console.log(obj.getFullPrice());
-        console.log(obj.getServicePercentPrices());
-        console.log(obj.getTitle());
+        console.log(appData.getAllServicePrices());
+        console.log(appData.getFullPrice());
+        console.log(appData.getServicePercentPrices());
+        console.log(appData.getTitle());
         for (let key in appData) {
             console.log(key);
         }
     },
     start: function () {
         appData.asking();
-        obj.logger();
+        appData.logger();
     },
 };
 
-obj.start();
+appData.start();
