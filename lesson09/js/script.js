@@ -8,7 +8,9 @@ const secondClass = document.querySelectorAll('.other-items.number');
 const input = document.querySelector('.rollback > .main-controls__range > input');
 const span = document.querySelector('.rollback > .main-controls__range > .range-value');
 const totalInput = document.getElementsByClassName('total-input');
+
 for(let key of totalInput) {
     console.log(key);
 }
+
 let screens = document.querySelectorAll('.screen');
