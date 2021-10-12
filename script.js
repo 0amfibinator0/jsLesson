@@ -18,16 +18,22 @@ const appData = {
         appData.getTitle();
         appData.logger();
     },
+    isString: function (str) {
+        return (!parseFloat(str) && str !== null && str.trim() !== '') ? true : false;
+    },
     isNumber: function (num) {
         return !isNaN(parseFloat(num)) && isFinite(num);
     },
     asking: function () {
         do {
             appData.title = prompt('Как называется ваш проект?', 'jsLesson');
-        } while (typeof appData.title === 'string' || appData.title instanceof String);
+        } while (!appData.isString(appData.title));
         for (let i = 0; i < 2; i++) {
-            let name = prompt("Какие типы экранов нужно разработать?");
+            let name;
             let price = 0;
+            do {
+                name = prompt('Какие типы экранов нужно разработать?', 'Простые');
+            } while (!appData.isString(name));
             do {
                 price = prompt('Сколько будет стоить данная работа?');
             } while (!appData.isNumber(price));
@@ -37,7 +43,10 @@ const appData = {
         let i = 0;
         do {
             i++;
-            let name = prompt('Какой дополнительный тип услуги нужен?');
+            let name;
+            do {
+                name = prompt('Какой дополнительный тип услуги нужен?');
+            } while (!appData.isString(name));
             do {
                 firstPrice = prompt('Сколько это будет стоить?');
             } while (!appData.isNumber(firstPrice));
