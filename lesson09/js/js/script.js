@@ -1,155 +1,157 @@
-// урок 1 //
+'use strict';
 
-// console.log('Дени');
-// console.log('world');
-// console.log('12');
-// console.log(12);
-// console.log('Hello' + ' world');// конкатенация
-// console.log('Hello ' + 'world');
-// console.log('Hello ' + 'world');
-// console.log('Hello' + ' ' + 'world');
-// console.log('добро' + ' пожаловать ' + 'на курс');
-// console.info('Hello');
-// alert('Hello');
-// alert('Hello'); // всплывающее окно
-// alert('Hello');
+const title = document.getElementsByTagName('h1')[0];
+const button = document.querySelector('.screen-btn');
 
-// document.getElementById('out').innerHTML = 'Hello';
-// document.getElementById('out').innerHTML = '2021';
-// document.getElementById('out').innerHTML = '<b>2020</b>';
+const firstClass = document.querySelectorAll('.other-items.percent');
+const secondClass = document.querySelectorAll('.other-items.number');
 
-// document.querySelector('h2.header').innerHTML = 5; // берет первый попавшийся селектор
-// document.querySelector('.header').innerHTML = 5; // можно и так и так
+const input = document.querySelector('.rollback > .main-controls__range > input');
+const span = document.querySelector('.rollback > .main-controls__range > .range-value');
 
-// document.querySelector('#one').innerHTML = 5858; // обрашение к id через #
-// document.getElementById('one').innerHTML = 6868;
+const startBtn = document.getElementsByClassName('handler_btn')[0];
+const resetBtn = document.getElementsByClassName('handler_btn')[1];
 
-// let b; // var a - устарело
-// let a = document.querySelector('#one'); // внутрь a получил параграфф
-// let c;
-// c = document.querySelector('.header'); // можно и так
+const total = document.getElementsByClassName('total-input')[0];
+const totalCount = document.getElementsByClassName('total-input')[1];
+const totalCountOther = document.getElementsByClassName('total-input')[2];
+const fullTotalCount = document.getElementsByClassName('total-input')[3];
+const totalCountRollback = document.getElementsByClassName('total-input')[4];
 
-// a.innerHTML = 9999; // new! - ошибка
-// c.innerHTML = 4848;
+const range = document.querySelector('.main-controls__range > input');
+const rangeSpan = document.querySelector('.range-value');
 
-// урок 2 //
+let screens = document.querySelectorAll('.screen');
 
-// let a = 7;
-// let b = 9;
-// console.log(a * b);
-// let c = 7;
-// let d = 9;
-// console.log(c / d);
-// let e = 3;
-// let f = 5;
-// console.log(e + f);
+const appData = {
+    title: '',
+    screens: [], 
+    screenPrice: 0,
+    adaptive: true,
+    rollback: 10,
+    screenNumber: [],
+    servicePricesPercent: 0,
+    servicePricesNumber: 0,
+    fullPrice: 0,
+    servicePercentPrice: 0,
+    servicesPercent: {},
+    servicesNumber: {},
+    blockCalc: function() {
+        startBtn.disabled = false;
+        startBtn.style.backgroundColor = '#A52A2A';
+        startBtn.style.cursor = 'initial';
 
-// console.log(a);
+        const selects = document.querySelectorAll('.screen select');
+        const screenInputs = document.querySelectorAll('.screen input');
 
-// let inputIn = document.querySelector('.input-in') // input
-// let button = document.querySelector('.button') // button
-// let div = document.querySelector('.out')
+        selects.forEach((select) => {
+            select.addEventListener('change', appData.blockCalc);
+            if(!select.value) {
+                startBtn.disabled = true;
+                startBtn.style.backgroundColor = '#818181';
+                startBtn.style.cursor = 'not-allowed';
+            }
+        });
+        screenInputs.forEach((input) => {
+            input.addEventListener('input', appData.blockCalc);
+            if(!input.value.trim()) {
+                startBtn.disabled = true;
+                startBtn.style.backgroundColor = '#818181';
+                startBtn.style.cursor = 'not-allowed';
+            }
+        });
+    },
+    init: function () {
+        appData.blockCalc();
+        appData.addTitle();
+        startBtn.addEventListener('click', appData.start);
+        button.addEventListener('click', appData.addScreenBlock);
+    },
+    addTitle: function () {
+        document.title = title.textContent;
+    },
+    start: function () {
+        appData.addScreens();
+        appData.addServices();
+        appData.addPrices();
+        // appData.logger();
+        appData.showResult();
+    },
+    showRollback: function () {
+        range.addEventListener('input', function(event) {
+            rangeSpan.textContent = event.target.value;
+            appData.rollback = event.target.value;
+        });
+    },
+    showResult: function () {
+        total.value = appData.screenPrice;
+        totalCountOther.value = appData.servicePricesPercent + appData.servicePricesNumber;
+        fullTotalCount.value = appData.fullPrice;
+        totalCountRollback.value = appData.servicePercentPrice;
+    },
+    addScreens: function () {
+        screens = document.querySelectorAll('.screen');
+        screens.forEach(function (screen, index) {
+            const select = screen.querySelector('select');
+            const input = screen.querySelector('input');
+            const selectName = select.options[select.selectedIndex].textContent;
+            appData.screens.push({
+                id: index,
+                name: selectName,
+                count: +input.value,
+                price: +select.value * +input.value,
+            });
+        });
+        console.log(appData.screens);
+    },
+    addServices: function () {
+        firstClass.forEach(function(item) {
+            const check = item.querySelector('input[type=checkbox');
+            const label = item.querySelector('label');
+            const input = item.querySelector('input[type=text');
+            if(check.checked) {
+                appData.servicesPercent[label.textContent] = +input.value;
+            }
+        });
+        secondClass.forEach(function(item) {
+            const check = item.querySelector('input[type=checkbox');
+            const label = item.querySelector('label');
+            const input = item.querySelector('input[type=text');
+            if(check.checked) {
+                appData.servicesNumber[label.textContent] = +input.value;
+            }
+        });
+    },
+    addScreenBlock: function () {
+        const clonScreen = screens[0].cloneNode(true);
+        screens[screens.length - 1].after(clonScreen);
+        clonScreen.children[1].children[0].value = '';
 
-// button.onclick = function () {
-//     // будет выполняться только когда кнопка нажата
-//     console.log('работает');
-//     // console.log(inputIn.value); // value - это то что введено в input
-//     let b = +inputIn.value; // + - преобразовывает в число
-//     console.log(b + 10); // '55' + 10 = 5510
-//     div.innerHTML = b;
-//     inputIn.value = ''; // подчистить input после клика
-// }
+        appData.blockCalc();
+    }, 
+    addPrices: function () {
+        for (let screen of appData.screens) {
+            appData.screenPrice += +screen.price;
+        }
+        for(let key in appData.servicesNumber) {
+            appData.servicePricesNumber += appData.servicesNumber[key];
+        }
+        for(let key in appData.servicesPercent) {
+            appData.servicePricesPercent += appData.screenPrice * (appData.servicesPercent[key] / 100);
+        }
+        totalCount.value = appData.screens.reduce((accumulator, screen) => {
+            return (accumulator += screen.count);
+        }, 0);
+        appData.fullPrice = +appData.screenPrice + appData.servicePricesPercent + appData.servicePricesNumber;
+        appData.servicePercentPrice = appData.fullPrice - (appData.fullPrice * (appData.rollback / 100));
+    },
+    logger: function () {
+        console.log(appData.fullPrice);
+        console.log(appData.servicePercentPrice);
+        console.log(appData.screens);
+    },
+};
 
-// 3 урок //
+appData.init();
 
-// let a = 9;
-
-// >= - больще либо равно 
-// <= - меньше либо равно
-// == - равно
-// != - неравно
-// if(a != 9) {
-//     // true
-//     console.log('Yes')
-// }
-// else {
-//     console.log('else')
-// }
-
-const button = document.querySelector('.bt');
-const input = document.querySelector('.age');
-
-// () => - стрелочная функция (используется только одни раз)
-// button.onclick = () => {
-//     let num = +input.value;
-//     if (num >= 16 && num < 60) { // && - оператор "и" 
-//         console.log ('welcome');
-//     }
-//     else if (num > 60) {
-//         console.log ('ты точно сюда?');
-//     }
-//     else {
-//         console.log ('ты не пройдешь');
-//     }
-
-//     switch (num) {
-//         case 15:
-//             console.log('еще год потрерпи');
-//             break; // не проверять остальные блоки
-//         case 16:
-//             console.log('можно');
-//             break;
-//         default: // default = else
-//             console.log('ok');
-//     }
-// }
-
-// let b = 5;
-
-// console.log(b == 3 || b == 7); // || - или
-
-
-// ЗАДАНИЕ 1
-
-button.onclick = () => {
-    let num = +input.value;
-    if (num === 4 ) {
-        console.log ('true');
-    }
-    else {
-        console.log('false');
-    }
-}
-
-// ЗАДАНИЕ 2
-
-let button2 = document.querySelector('.btn');
-let a21 = 31;
-let a22 = 20;
-
-button2.onclick = () => {
-    if (a21 > a22) {
-        console.log(a21);
-    }
-    else {
-        console.log(a22);
-    }
-}
-
-// ЗАДАНИЕ 3
-
-let button3 = document.querySelector('.b');
-let i31 = document.querySelector('.input1');
-let i32 = document.querySelector('.input2');
-
-button3.onclick = () => {
-    let num1 = +i31.value;
-    let num2 = +i32.value;
-
-    if (num1 > num2) {
-        console.log (i31.value);
-    }
-    else {
-        console.log (i32.value);
-    }
-}
+appData.showRollback();
