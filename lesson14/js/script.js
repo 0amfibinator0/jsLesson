@@ -45,6 +45,7 @@ const appData = {
 
         range.value = '0';
         rangeSpan.textContent = '0';
+        
         checks.forEach((check) => {
             check.checked = false;
         });
