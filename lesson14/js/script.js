@@ -43,6 +43,12 @@ const appData = {
         const range = document.querySelector('input[type=range');
         const rangeSpan = document.querySelector('.range-value');
 
+        total.value = '0';
+        totalCount.value = '0';
+        totalCountOther.value = '0';
+        fullTotalCount.value = '0';
+        totalCountRollback.value = '0';
+
         range.value = '0';
         rangeSpan.textContent = '0';
         
@@ -110,7 +116,7 @@ const appData = {
     init: function () {
         this.blockCalc();
         this.addTitle();
-        startBtn.addEventListener('click', this.start);
+        startBtn.addEventListener('click', this.start.bind(this));
         button.addEventListener('click', this.addScreenBlock);
         resetBtn.addEventListener('click', this.reset);
     },
@@ -118,12 +124,12 @@ const appData = {
         document.title = title.textContent;
     },
     start: function () {
-        appData.disabled();
-        appData.addScreens();
-        appData.addServices();
-        appData.addPrices();
+        this.disabled();
+        this.addScreens();
+        this.addServices();
+        this.addPrices();
         // appData.logger();
-        appData.showResult();
+        this.showResult();
     },
     showRollback: function () {
         range.addEventListener('input', (event) => {
